@@ -1,9 +1,13 @@
 <script setup>
 import { onMounted } from 'vue'
 import { initFlowbite } from 'flowbite'
+import axios from "axios";
 
 onMounted(() => {
   initFlowbite();
+
+  axios.get('https://www.klerk.ru/yindex.php/v3/event/rubrics')
+      .then( ({data}) => console.log(data))
 })
 </script>
 
