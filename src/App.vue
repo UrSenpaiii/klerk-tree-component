@@ -2,8 +2,8 @@
 import {onMounted, ref, watch} from 'vue'
 import {initFlowbite} from 'flowbite'
 import axios from "axios";
-import Tree from "@/components/Tree.vue"
 import Loader from "@/components/Loader.vue";
+import Node from "@/components/Node.vue";
 
 const nodes = ref<Object>(null)
 const allowEmpty = ref<Boolean>(false)
@@ -26,40 +26,32 @@ onMounted(() => {
   fetchNodes()
 })
 
-function summing(count) {
-  totalCount.value += count
+function sumSelectedCount(selectedCount) {
+  totalCount.value += selectedCount
 }
 </script>
 
 <template>
-
-<div class="flex items-center justify-between">
-  <div class="font-medium text-gray-300">
-    Сумма выделенных элементов:
-    <span class="font-bold text-lg">{{ totalCount }}</span>
+  <div class="flex items-center justify-between">
+    <div class="font-medium text-gray-300">
+      Сумма выделенных элементов:
+      <span class="font-bold text-lg">{{ totalCount }}</span>
+    </div>
+    <div class="flex items-center my-2 gap-2">
+      <input id="allow-empty-checkbox" type="checkbox" v-model="allowEmpty"
+             class="cursor-pointer text-green-700 rounded focus:ring-green-600 ring-offset-neutral-800 focus:ring-2 bg-neutral-800 border-neutral-600">
+      <label for="allow-empty-checkbox" class="cursor-pointer font-medium text-gray-300">
+        Отображать пустые рубрики
+      </label>
+    </div>
   </div>
-  <div class="checkbox-container flex items-center my-2 gap-2">
-    <input id="allow-empty-checkbox" type="checkbox" v-model="allowEmpty"
-           class="text-green-700 rounded focus:ring-green-600 ring-offset-neutral-800 focus:ring-2 bg-neutral-800 border-neutral-600">
-    <label for="allow-empty-checkbox" class="font-medium text-gray-300">Отображать пустые рубрики</label>
-  </div>
-</div>
 
   <ul class="border border-green-400">
-
     <Loader v-if="!nodes" class="flex justify-center m-8"/>
 
-    <Tree v-for="node in nodes" :key="node.id"
+    <Node v-for="node in nodes" :key="node.id"
           :node="node"
-          @select="summing"
+          @select="sumSelectedCount"
     />
   </ul>
 </template>
-
-<style scoped lang="scss">
-.checkbox-container {
-  input, label {
-    cursor: pointer;
-  }
-}
-</style>
